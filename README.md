@@ -1,5 +1,6 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Nasrif30/TUKUB-AI/main/docs/banner.png" alt="TUKUB AI Banner" width="800"/>
+  <img width="1397" height="639" alt="Screenshot 2026-06-07 231037" src="https://github.com/user-attachments/assets/bece625d-2f90-44a9-841a-b63bdd638c6c" />
+
 
   # TUKUB AI
   **Autonomous Security Agent**
