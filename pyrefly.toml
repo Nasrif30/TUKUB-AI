@@ -1,0 +1,20 @@
+# Pyrefly type-checker configuration
+# https://pyrefly.org/en/docs/configuration/
+
+[pyrefly]
+# Tell Pyrefly the project root so it can resolve internal modules
+# (cli.*, agent.*, config.*, tools.*) correctly.
+python_version = "3.13"
+source_directories = ["."]
+
+# Paths to ignore (venv, cache, generated files)
+exclude = [
+  "venv",
+  ".venv",
+  "__pycache__",
+  "*.pyc",
+  ".tukub",
+]
+
+# Search paths for internal package resolution
+search_path = ["."]

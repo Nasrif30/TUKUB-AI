@@ -1,0 +1,23 @@
+# Virtual Environments
+venv/
+.venv/
+env/
+.env
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# TUKUB AI specific
+.tukub/
+keys.json
+scan_report.json
+test_nvidia_api.py
+
+# IDE / OS Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

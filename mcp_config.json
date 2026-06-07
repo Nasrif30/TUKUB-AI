@@ -1,0 +1,266 @@
+{
+  "name": "TUKUB AI - Security Agent MCP Server",
+  "version": "1.0.0",
+  "description": "Model Context Protocol server for autonomous security testing",
+  "transport": {
+    "type": "stdio",
+    "config": {
+      "encoding": "json"
+    }
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": true
+    },
+    "resources": {
+      "subscribe": true,
+      "listChanged": true
+    },
+    "prompts": {
+      "listChanged": true
+    },
+    "sampling": {},
+    "roots": {
+      "listChanged": true
+    }
+  },
+  "tools": [
+    {
+      "name": "nmap_scan",
+      "description": "Perform network port scanning and service detection",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "target": {"type": "string", "description": "Target IP or domain"},
+          "ports": {"type": "string", "description": "Port range (e.g., 1-1000)"},
+          "scan_type": {"type": "string", "enum": ["syn", "tcp", "udp"], "default": "syn"}
+        },
+        "required": ["target"]
+      }
+    },
+    {
+      "name": "nuclei_scan",
+      "description": "Run vulnerability scanning using nuclei templates",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "target": {"type": "string", "description": "Target URL"},
+          "severity": {"type": "string", "enum": ["critical", "high", "medium", "low"], "default": "high"},
+          "templates": {"type": "array", "items": {"type": "string"}, "description": "Specific templates to use"}
+        },
+        "required": ["target"]
+      }
+    },
+    {
+      "name": "ffuf_fuzz",
+      "description": "Web fuzzing for directory and parameter discovery",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {"type": "string", "description": "Target URL with FUZZ keyword"},
+          "wordlist": {"type": "string", "description": "Path to wordlist"},
+          "extensions": {"type": "string", "description": "File extensions to try"}
+        },
+        "required": ["url", "wordlist"]
+      }
+    },
+    {
+      "name": "sqlmap_exploit",
+      "description": "Automated SQL injection detection and exploitation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {"type": "string", "description": "Target URL"},
+          "data": {"type": "string", "description": "POST data"},
+          "level": {"type": "integer", "minimum": 1, "maximum": 5, "default": 1}
+        },
+        "required": ["url"]
+      }
+    },
+    {
+      "name": "netexec_enum",
+      "description": "Network enumeration for Active Directory and SMB",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "target": {"type": "string", "description": "Target IP or CIDR"},
+          "protocol": {"type": "string", "enum": ["smb", "winrm", "ssh", "ldap"], "default": "smb"},
+          "username": {"type": "string", "description": "Username for authentication"},
+          "password": {"type": "string", "description": "Password for authentication"}
+        },
+        "required": ["target"]
+      }
+    },
+    {
+      "name": "bloodhound_collect",
+      "description": "Collect Active Directory data for BloodHound analysis",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "domain": {"type": "string", "description": "Domain name"},
+          "username": {"type": "string", "description": "Domain username"},
+          "password": {"type": "string", "description": "Password"},
+          "dc": {"type": "string", "description": "Domain controller IP"}
+        },
+        "required": ["domain", "username", "password"]
+      }
+    },
+    {
+      "name": "prowler_audit",
+      "description": "Cloud security audit for AWS/Azure/GCP",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "provider": {"type": "string", "enum": ["aws", "azure", "gcp"], "description": "Cloud provider"},
+          "profile": {"type": "string", "description": "AWS profile name"},
+          "services": {"type": "array", "items": {"type": "string"}, "description": "Specific services to audit"}
+        },
+        "required": ["provider"]
+      }
+    },
+    {
+      "name": "trivy_scan",
+      "description": "Container and filesystem vulnerability scanning",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "target": {"type": "string", "description": "Image name, path, or directory"},
+          "severity": {"type": "string", "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"], "default": "HIGH"},
+          "scan_type": {"type": "string", "enum": ["image", "filesystem", "repo"], "default": "image"}
+        },
+        "required": ["target"]
+      }
+    },
+    {
+      "name": "hashcat_crack",
+      "description": "Password hash cracking",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "hash_file": {"type": "string", "description": "Path to hash file"},
+          "hash_type": {"type": "integer", "description": "Hashcat hash type code"},
+          "wordlist": {"type": "string", "description": "Path to wordlist"},
+          "rules": {"type": "string", "description": "Rule file for transformations"}
+        },
+        "required": ["hash_file", "hash_type", "wordlist"]
+      }
+    },
+    {
+      "name": "volatility_analyze",
+      "description": "Memory forensics analysis",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "memory_file": {"type": "string", "description": "Path to memory dump"},
+          "profile": {"type": "string", "description": "OS profile (e.g., Win10x64)"},
+          "plugin": {"type": "string", "description": "Volatility plugin to run"}
+        },
+        "required": ["memory_file"]
+      }
+    },
+    {
+      "name": "ghidra_analyze",
+      "description": "Binary reverse engineering",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "binary": {"type": "string", "description": "Path to binary file"},
+          "analysis_type": {"type": "string", "enum": ["decompile", "disassemble", "functions"], "default": "decompile"}
+        },
+        "required": ["binary"]
+      }
+    },
+    {
+      "name": "amass_enum",
+      "description": "Subdomain enumeration",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "domain": {"type": "string", "description": "Target domain"},
+          "passive": {"type": "boolean", "default": true, "description": "Use passive sources only"},
+          "active": {"type": "boolean", "default": false, "description": "Perform active enumeration"}
+        },
+        "required": ["domain"]
+      }
+    },
+    {
+      "name": "hydra_bruteforce",
+      "description": "Network login brute force",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "target": {"type": "string", "description": "Target IP or hostname"},
+          "service": {"type": "string", "enum": ["ssh", "ftp", "http-post", "smb", "rdp"], "description": "Service to attack"},
+          "userlist": {"type": "string", "description": "Path to username list"},
+          "passlist": {"type": "string", "description": "Path to password list"}
+        },
+        "required": ["target", "service", "userlist", "passlist"]
+      }
+    }
+  ],
+  "resources": [
+    {
+      "uri": "tukub://findings",
+      "name": "Current Findings",
+      "description": "All findings discovered during assessment",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "tukub://state",
+      "name": "Agent State",
+      "description": "Current agent state and context",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "tukub://skills",
+      "name": "Loaded Skills",
+      "description": "Currently loaded skill modules",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "tukub://tools",
+      "name": "Available Tools",
+      "description": "List of all available security tools",
+      "mimeType": "application/json"
+    }
+  ],
+  "prompts": [
+    {
+      "name": "web_penetration_test",
+      "description": "Prompt template for web penetration testing",
+      "arguments": [
+        {"name": "target", "description": "Target URL", "required": true},
+        {"name": "scope", "description": "Testing scope", "required": false}
+      ]
+    },
+    {
+      "name": "ad_assessment",
+      "description": "Prompt template for Active Directory security assessment",
+      "arguments": [
+        {"name": "domain", "description": "Domain name", "required": true},
+        {"name": "dc_ip", "description": "Domain controller IP", "required": false}
+      ]
+    },
+    {
+      "name": "cloud_audit",
+      "description": "Prompt template for cloud security audit",
+      "arguments": [
+        {"name": "provider", "description": "Cloud provider (aws/azure/gcp)", "required": true},
+        {"name": "profile", "description": "Profile name", "required": false}
+      ]
+    },
+    {
+      "name": "ctf_challenge",
+      "description": "Prompt template for CTF competition",
+      "arguments": [
+        {"name": "target", "description": "CTF target", "required": true},
+        {"name": "category", "description": "Challenge category", "required": false}
+      ]
+    }
+  ],
+  "logging": {
+    "level": "INFO",
+    "format": "json",
+    "output": "tukub_mcp.log"
+  }
+}
