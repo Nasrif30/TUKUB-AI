@@ -1,5 +1,6 @@
 <div align="center">
-  <img width="1397" height="639" alt="Screenshot 2026-06-07 231037" src="https://github.com/user-attachments/assets/bece625d-2f90-44a9-841a-b63bdd638c6c" />
+  <img width="1406" height="667" alt="image" src="https://github.com/user-attachments/assets/b371199b-5df8-4939-afe5-c8f68dca3430" />
+
 
 
   # TUKUB AI
